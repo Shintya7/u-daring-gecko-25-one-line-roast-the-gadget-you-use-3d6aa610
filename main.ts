@@ -22,6 +22,12 @@ function validateRoast(roast: string): void {
     throw new Error("Roast must be a single line.");
   }
 
+  // Control characters (tabs, carriage returns, ANSI escapes, ...) would
+  // break the single-line plain-text contract even without a newline.
+  if (/[\u0000-\u001f\u007f]/.test(roast)) {
+    throw new Error("Roast must not contain control characters.");
+  }
+
   if (roast.trim().length === 0) {
     throw new Error("Roast must not be only whitespace.");
   }
